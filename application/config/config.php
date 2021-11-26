@@ -266,18 +266,17 @@ $config['default_controller'] = 'Home';
 $config['project_name'] = 'Ceramic';
 $config['case_insensitive'] = true;
 $config['globals'] = array(
-	//dirname(dirname(ROOT)) . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "pages.php",
-	dirname(dirname(ROOT)) . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "config.php"
+	//dirname(dirname(ROOT)) . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "config.php"
 );
-$config['includes'] = array(dirname(dirname(ROOT)) . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "config.php");
 //$config['includes'] = array(dirname(dirname(ROOT)) . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR);
+//$config['includes'] = array(dirname(dirname(ROOT)) . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "config.php");
 
 $config['header'] = 'global/header';
 $config['footer'] = 'global/footer';
 $config['force_https'] = true;
 /* $config['authentication'] = array(
 	'controller' => 'login',
-	'session' => 'atpl-erp-sessid',
+	'session' => 'cm-login-sessid',
 	'referrer' => true,
 	'type' => ''
 ); */
