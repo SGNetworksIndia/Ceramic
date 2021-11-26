@@ -1,37 +1,71 @@
-## Welcome to GitHub Pages
+<div align="center">
+    <a href="https://ceramic.eu.org">
+        <img alt="Ceramic" src="https://img.static.sgnetworks.eu.org/logos/Ceramic-Cup.png" width="150">
+    </a>
+</div>
 
-You can use the [editor on GitHub](https://github.com/SGNetworksIndia/Ceramic/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+# The Ceramic Framework
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Ceramic is a lightweight yet powerful Model-View-Controller (MVC) framework for PHP. Ceramic is mostly compatible with [CodeIgniter](https://github.com/bcit-ci/CodeIgniter), which includes the
+"Helpers", "Libraries" and also the configuration system almost same as CodeIgniter yet easy to configure and use, which makes it an iconic PHP MVC framework. It allows ***Ceramic Developers*** to use
+the power of two frameworks in one. Ceramic is released under its exclusive license [CMF License v1.0](https://github.com/SGNetworksIndia/Ceramic/blob/master/LICENSE).
 
-### Markdown
+## INSTALLATION
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Download the latest version of Ceramic from
+[ceramic.eu.org/downloads](https://ceramic.eu.org/downloads/) or
+[github.com/SGNetworksIndia/Ceramic/releases](https://github.com/SGNetworksIndia/Ceramic/releases), and extract the archive on the root directory of your website, or you may extract it on any
+directory you want.
 
-```markdown
-Syntax highlighted code block
+Now open `/application/` directory and change the `config.php` & `database.php` according to your requirement but the `base_url` variable must be changed according to your relative project root.
 
-# Header 1
-## Header 2
-### Header 3
+Now you are ready to start developing your website in Ceramic, to start developing, just write your codes and create or put the files in the `/application/` directory. For more information, read
+the [documentation](#documentation).
 
-- Bulleted
-- List
+## DOCUMENTATION
 
-1. Numbered
-2. List
+The documentation for **_Ceramic_** is available at [docs.ceramic.eu.org](https://docs.ceramic.eu.org/) and the documentation for **_CodeIgniter_** can be found
+at [codeigniter.com/user_guide](https://codeigniter.com/user_guide/index.html).
 
-**Bold** and _Italic_ and `Code` text
+## CODEIGNITER HELPERS & LIBRARIES
 
-[Link](url) and ![Image](src)
-```
+To install and use CodeIgniter Helpers and Libraries, just copy the helper or library from a compatible CodeIgniter release package to Ceramic (`/system/`) while matching the path.
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+* ### To install helpers:
+  Copy the helper from CodeIgniter to `Ceramic/system/helpers/` and access the helper from **Controller** using `$loader->load->helper('helper_name')`
 
-### Jekyll Themes
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/SGNetworksIndia/Ceramic/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+* ### To install libraries:
+  Copy the library from CodeIgniter to `Ceramic/system/libraries/` (matching the exact path it was on CodeIgniter) and access the helper from **Controller** using `$loader->load->library
+  ('library_name')`
 
-### Support or Contact
+## UPCOMING FEATURES
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+There are many features are staged to be implemented in the upcoming releases. The currently planned features awaiting to be implemented are:
+
+1. Router
+2. RESTful Resource Handling
+3. Hooks
+4. Services (background php classes) & Web Services
+5. Caching
+6. Asynchronous Requests (AJAX)
+7. HTTP/2 Server Push (Server Sent Events)
+8. Localization
+
+## CONTRIBUTING
+
+To contribute on the **_Ceramic Core_**, send an email on [contribute@ceramic.eu.org](mailto:contribute@ceramic.eu.org) with the following information:
+
+* Your real name
+* Your GitHub Username
+* Your contact E-mail ID (where you can be reached)
+* Describing your skills and an idea on how the upcoming features can be implemented
+
+If you are selected, you'll receive an email from the core development team with all the information required to move forward.
+
+Or if you have a new feature which can be added in the `Ceramic Core`, just email to [rfc@ceramic.eu.org](mailto:rfc@ceramic.eu.org) with your proposal.
+
+Or if you found a bug or error which need to be fixed create an issue at [issues](https://github.com/SGNetworksIndia/Ceramic/issues) or if you think you can fix the issue, report the bug to
+[bug@ceramic.eu.org](mailto:bug@ceramic.eu.org) explaining the issue you found.
+
+

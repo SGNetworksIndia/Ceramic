@@ -1,0 +1,55 @@
+--------------------------------------------------------------------
+               The CMF License, version 1.0
+Copyright (c) 2020 - 2021 SGNetworks. All rights reserved.
+Copyright (c) 2021 Ceramic. All rights reserved.
+--------------------------------------------------------------------
+
+Use in source and binary forms, with or without modification,
+is permitted provided that the following conditions are met:
+
+  1. Redistributions of source code or binary form is strictly prohibited.
+
+  2. The SGNetworks or Ceramic may publish revised and/or new versions
+     of the license from time to time. Each version will be given a
+     distinguishing version number.
+     Once covered code has been published under a particular version
+     of the license, you may always continue to use it under the terms
+     of that version. You may also choose to use such covered code
+     under the terms of any subsequent version of the license
+     published by the SGNetworks or Ceramic.
+     No one other than the SGNetworks or Ceramic has the right to modify
+     the terms applicable to covered code created under this License.
+
+  3. Distributions of products or websites created using Ceramic must retain
+     the following acknowledgment:
+     "This product is created using Ceramic, freely available from
+     <https://www.ceramic.eu.org/download/>" or the official logo of
+     Ceramic and a link to <https://www.ceramic.eu.org/download/>.
+
+THIS SOFTWARE IS PROVIDED BY THE CERAMIC DEVELOPMENT TEAM ``AS IS`` AND
+ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE CERAMIC
+DEVELOPMENT TEAM OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+OF THE POSSIBILITY OF SUCH DAMAGE.
+
+--------------------------------------------------------------------
+
+This software consists of voluntary contributions made by many
+individuals on behalf of the Ceramic Group.
+
+The Ceramic Group can be contacted via Email at group@ceramic.eu.org.
+
+For more information on the Ceramic Group and the Ceramic project,
+please see <https://www.ceramic.eu.org>.
+
+Ceramic partially includes the Helpers & Libraries shipped with CodeIgniter.
+Use of those Helpers & Libraries is limited by the license located at
+<https://github.com/bcit-ci/CodeIgniter/blob/develop/license.txt>.
+The CodeIgniter framework is freely available at <https://www.codeigniter.com>.
