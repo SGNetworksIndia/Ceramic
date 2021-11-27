@@ -10,6 +10,23 @@ Ceramic is a lightweight yet powerful Model-View-Controller (MVC) framework for 
 "Helpers", "Libraries" and also the configuration system almost same as CodeIgniter yet easy to configure and use, which makes it an iconic PHP MVC framework. It allows ***Ceramic Developers*** to use
 the power of two frameworks in one. Ceramic is released under its exclusive license [CMF License v1.0](https://github.com/SGNetworksIndia/Ceramic/blob/master/LICENSE).
 
+## REQUIREMENTS
+
+* **Ceramic Version**: 1.0.1
+
+### Core Requirements
+
+| Technology | Version        | Link                                                                   |
+|------------|----------------|------------------------------------------------------------------------|
+| PHP        | 7.1.1 - 7.4.6  | [www.php.net](https://www.php.net/releases/)                           |
+| MySQL      | 5.6.30+        | [downloads.mysql.com](https://downloads.mysql.com/archives/community/) |
+
+### CodeIgniter Compatibility
+
+| Version (Minimum) | Version (Maximum) | Link                                                |
+|-------------------|-------------------|-----------------------------------------------------|
+| 3.1.7             | 3.1.11            | [CI 3](https://github.com/bcit-ci/CodeIgniter/tags) |
+
 ## INSTALLATION
 
 Download the latest version of Ceramic from
@@ -23,24 +40,20 @@ Now you are ready to start developing your website in Ceramic, to start developi
 the [documentation](#documentation).
 
 ## DOCUMENTATION
-
 The documentation for **_Ceramic_** is available at [docs.ceramic.eu.org](https://docs.ceramic.eu.org/) and the documentation for **_CodeIgniter_** can be found
 at [codeigniter.com/user_guide](https://codeigniter.com/user_guide/index.html).
 
 ## CODEIGNITER HELPERS & LIBRARIES
-
 To install and use CodeIgniter Helpers and Libraries, just copy the helper or library from a compatible CodeIgniter release package to Ceramic (`/system/`) while matching the path.
 
 * ### To install helpers:
   Copy the helper from CodeIgniter to `Ceramic/system/helpers/` and access the helper from **Controller** using `$loader->load->helper('helper_name')`
-
 
 * ### To install libraries:
   Copy the library from CodeIgniter to `Ceramic/system/libraries/` (matching the exact path it was on CodeIgniter) and access the helper from **Controller** using `$loader->load->library
   ('library_name')`
 
 ## UPCOMING FEATURES
-
 There are many features are staged to be implemented in the upcoming releases. The currently planned features awaiting to be implemented are:
 
 1. Router
@@ -53,7 +66,6 @@ There are many features are staged to be implemented in the upcoming releases. T
 8. Localization
 
 ## CONTRIBUTING
-
 To contribute on the **_Ceramic Core_**, send an email on [contribute@ceramic.eu.org](mailto:contribute@ceramic.eu.org) with the following information:
 
 * Your real name
