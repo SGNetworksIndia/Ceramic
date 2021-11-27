@@ -294,7 +294,7 @@ abstract class CI_DB_utility {
 		extract($params);
 
 		// Load the xml helper
-		get_instance()->load->helper('xml');
+		getCMControllerInstance()->load->helper('xml');
 
 		// Generate the result
 		$xml = '<'.$root.'>'.$newline;
@@ -404,7 +404,7 @@ abstract class CI_DB_utility {
 			}
 
 			// Load the Zip class and output it
-			$CI =& get_instance();
+			$CI =& getCMControllerInstance();
 			$CI->load->library('zip');
 			$CI->zip->add_data($prefs['filename'], $this->_backup($prefs));
 			return $CI->zip->get_zip();

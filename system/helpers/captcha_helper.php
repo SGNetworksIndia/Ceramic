@@ -44,15 +44,14 @@ if(!function_exists('create_captcha')) {
 	/**
 	 * Create CAPTCHA
 	 *
-	 * @param array $data Data for the CAPTCHA
+	 * @param array|string $data Data for the CAPTCHA
 	 * @param string $img_path Path to create the image in (deprecated)
 	 * @param string $img_url URL to the CAPTCHA image folder (deprecated)
 	 * @param string $font_path Server path to font (deprecated)
 	 *
 	 * @return array
-	 * @throws \Exception
 	 */
-	function create_captcha($data = '', $img_path = '', $img_url = '', $font_path = '') {
+	function create_captcha(array|string $data = '', string $img_path = '', string $img_url = '', string $font_path = ''): array|bool {
 		$captcha = array('word' => '', 'time' => '', 'image' => '', 'filename' => '');
 		if(!extension_loaded('gd')) {
 			trigger_error("PHP Extension: <b>GD</b> is not loaded. The extension is required to use Captcha library.", E_USER_WARNING);
@@ -61,7 +60,7 @@ if(!function_exists('create_captcha')) {
 		$defaults = array(
 			'word' => rand(1, 999999),
 			'img_path' => ASSETS_PATH . 'captcha/images/',
-			'img_url' => (substr(config_item('base_url'), -1) == '/') ? config_item('base_url') . 'system/assets/captcha/images/' : config_item('base_url') . '/system/assets/captcha/images/',
+			'img_url' => (str_ends_with(config_item('base_url'), '/')) ? config_item('base_url') . 'system/assets/captcha/images/' : config_item('base_url') . '/system/assets/captcha/images/',
 			'img_width' => 150,
 			'img_height' => 30,
 			'font_path' => ASSETS_PATH . 'captcha/fonts/Coolvetica-Regular.ttf',
@@ -74,18 +73,18 @@ if(!function_exists('create_captcha')) {
 				'background' => array(255, 255, 255),
 				'border' => array(153, 102, 102),
 				'text' => array(204, 153, 153),
-				'grid' => array(255, 182, 182)
+				'grid' => array(255, 182, 182),
 			)
 		);
 		foreach($defaults as $key => $val) {
 			if(!is_array($data) && empty($$key)) {
 				$$key = $val;
 			} else {
-				$$key = isset($data[$key]) ? $data[$key] : $val;
+				$$key = $data[$key] ?? $val;
 			}
 		}
-		if($img_path === '' OR $img_url === '' OR !is_dir($img_path) OR !is_really_writable($img_path) OR !extension_loaded('gd')) {
-			return "";
+		if($img_path === '' or $img_url === '' or !is_dir($img_path) or !is_really_writable($img_path)) {
+			return [];
 		}
 		// -----------------------------------
 		// Remove old images
@@ -93,6 +92,7 @@ if(!function_exists('create_captcha')) {
 		$now = microtime(true);
 		$current_dir = @opendir($img_path);
 		while($filename = @readdir($current_dir)) {
+			/** @var int $expiration */
 			if(in_array(substr($filename, -4), array('.jpg', '.png')) && (str_replace(array('.jpg', '.png'), '', $filename) + $expiration) < $now) {
 				@unlink($img_path . $filename);
 			}
@@ -101,6 +101,7 @@ if(!function_exists('create_captcha')) {
 		// -----------------------------------
 		// Do we have a "word" yet?
 		// -----------------------------------
+		/** @var string $pool */
 		if(empty($word)) {
 			$word = '';
 			$pool_length = strlen($pool);
@@ -108,6 +109,7 @@ if(!function_exists('create_captcha')) {
 			// PHP7 or a suitable polyfill
 			if(function_exists('random_int')) {
 				try {
+					/** @var int $word_length */
 					for($i = 0; $i < $word_length; $i++) {
 						$word .= $pool[random_int(0, $rand_max)];
 					}
@@ -130,7 +132,7 @@ if(!function_exists('create_captcha')) {
 			}
 			// We'll try using the operating system's PRNG first,
 			// which we can access through CI_Security::get_random_bytes()
-			$security = get_instance()->security;
+			$security = getCMControllerInstance()->security;
 			// To avoid numerous get_random_bytes() calls, we'll
 			// just try fetching as much bytes as we need at once.
 			if(($bytes = $security->get_random_bytes($pool_length)) !== false) {

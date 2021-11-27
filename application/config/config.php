@@ -261,12 +261,12 @@ $config['log_file_permissions'] = 0644;
   | codes to set your own date formatting
   |
  */
-$config['log_date_format'] = 'Y-m-d H:i:s';
-$config['default_controller'] = 'Home';
 $config['project_name'] = 'Ceramic';
+$config['project_version'] = '1.1.0';
+$config['log_date_format'] = 'Y-m-d H:i:s';
+$config['default_controller'] = 'Welcome';
 $config['case_insensitive'] = true;
-$config['globals'] = array(
-	//dirname(dirname(ROOT)) . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "config.php"
+$config['globals'] = array(//dirname(dirname(ROOT)) . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "config.php"
 );
 //$config['includes'] = array(dirname(dirname(ROOT)) . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR);
 //$config['includes'] = array(dirname(dirname(ROOT)) . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "config.php");
@@ -281,6 +281,5 @@ $config['force_https'] = true;
 	'type' => ''
 ); */
 
-define("ENVIRONMENT", ENVIRONMENT_DEVELOPMENT);
-//define('SHOW_DEBUG_BACKTRACE', true);
-?>
+const ENVIRONMENT = ENVIRONMENT_DEVELOPMENT;
+//const SHOW_DEBUG_BACKTRACE = true;

@@ -117,7 +117,7 @@ class Form_validation {
 	 */
 	public function __construct($rules = array())
 	{
-		$this->CI =& get_instance();
+		$this->CI =& getCMControllerInstance();
 
 		// applies delimiters set in config file.
 		if (isset($rules['error_prefix']))

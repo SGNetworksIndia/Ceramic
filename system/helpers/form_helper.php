@@ -63,7 +63,7 @@ if ( ! function_exists('form_open'))
 	 */
 	function form_open($action = '', $attributes = array(), $hidden = array())
 	{
-		$CI =& get_instance();
+		$CI =& getCMControllerInstance();
 
 		// If no action is provided then set to the current url
 		if ( ! $action)
@@ -711,7 +711,7 @@ if ( ! function_exists('set_value'))
 	 */
 	function set_value($field, $default = '', $html_escape = TRUE)
 	{
-		$CI =& get_instance();
+		$CI =& getCMControllerInstance();
 
 		$value = (isset($CI->form_validation) && is_object($CI->form_validation) && $CI->form_validation->has_rule($field))
 			? $CI->form_validation->set_value($field, $default)
@@ -739,7 +739,7 @@ if ( ! function_exists('set_select'))
 	 */
 	function set_select($field, $value = '', $default = FALSE)
 	{
-		$CI =& get_instance();
+		$CI =& getCMControllerInstance();
 
 		if (isset($CI->form_validation) && is_object($CI->form_validation) && $CI->form_validation->has_rule($field))
 		{
@@ -786,7 +786,7 @@ if ( ! function_exists('set_checkbox'))
 	 */
 	function set_checkbox($field, $value = '', $default = FALSE)
 	{
-		$CI =& get_instance();
+		$CI =& getCMControllerInstance();
 
 		if (isset($CI->form_validation) && is_object($CI->form_validation) && $CI->form_validation->has_rule($field))
 		{
@@ -838,7 +838,7 @@ if ( ! function_exists('set_radio'))
 	 */
 	function set_radio($field, $value = '', $default = FALSE)
 	{
-		$CI =& get_instance();
+		$CI =& getCMControllerInstance();
 
 		if (isset($CI->form_validation) && is_object($CI->form_validation) && $CI->form_validation->has_rule($field))
 		{
@@ -1035,7 +1035,7 @@ if ( ! function_exists('_get_validation_object'))
 	 */
 	function &_get_validation_object()
 	{
-		$CI =& get_instance();
+		$CI =& getCMControllerInstance();
 
 		// We set this as a variable since we're returning by reference.
 		$return = FALSE;

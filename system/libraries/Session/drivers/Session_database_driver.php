@@ -81,8 +81,8 @@ class Session_database_driver extends Session_driver implements SessionHandlerIn
 	{
 		parent::__construct($params);
 
-		$CI =& get_instance();
-		isset($CI->db) OR $CI->load->database();
+		$CI =& getCMControllerInstance();
+		isset($CI->db) or $CI->load->database();
 		$this->_db = $CI->db;
 
 		if ( ! $this->_db instanceof CI_DB_query_builder)

@@ -40,7 +40,7 @@ function &DB($params = '', $query_builder_override = NULL) {
 		// Make packages contain database config files,
 		// given that the controller instance already exists
 		if(class_exists('CI_Controller', FALSE)) {
-			foreach(get_instance()->load->get_package_paths() as $path) {
+			foreach(getCMControllerInstance()->load->get_package_paths() as $path) {
 				if($path !== APP_PATH) {
 					if(file_exists($file_path = $path . 'config/' . ENVIRONMENT . '/database.php')) {
 						include($file_path);

@@ -136,13 +136,11 @@ class Lang {
 		}
 		else
 		{
-			foreach (get_instance()->load->get_package_paths(TRUE) as $package_path)
-			{
-				$package_path .= 'language/'.$idiom.'/'.$langfile;
-				if ($basepath !== $package_path && file_exists($package_path))
-				{
+			foreach(getCMControllerInstance()->load->get_package_paths(true) as $package_path) {
+				$package_path .= 'language/' . $idiom . '/' . $langfile;
+				if($basepath !== $package_path && file_exists($package_path)) {
 					include($package_path);
-					$found = TRUE;
+					$found = true;
 					break;
 				}
 			}

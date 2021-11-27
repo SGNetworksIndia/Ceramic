@@ -2,9 +2,11 @@
 defined('CM_VERSION') OR exit('No direct script access allowed');
 // system/core/Ceramic.class.php
 class Ceramic {
-	private static $instance;
+	private static Ceramic $instance;
 	public string $contentType = 'text/html';
 	public array $headers = array();
+	public bool $urlArgumentAsView = false;
+	public string $urlArgumentName = "";
 
 	/**
 	 * Ceramic constructor.
@@ -12,7 +14,6 @@ class Ceramic {
 	public function __construct() {
 		self::$instance =& $this;
 	}
-
 
 	public static function run() {
 		self::init();
@@ -50,21 +51,17 @@ class Ceramic {
 
 		if(!empty($baseURL)){
 			if(!empty($indexPage)){
-				$indexURL = "{$baseURL}/{$indexPage}";
 				$cv = substr($url, strpos($url, $baseURL));
-				$cv = ($baseURL == '/') ? $cv : substr($cv, strpos($cv, "{$baseURL}/") + strlen($baseURL));
+				$cv = ($baseURL == '/') ? $cv : substr($cv, strpos($cv, "$baseURL/") + strlen($baseURL));
 			}
 		} else {
 			$cv = substr($url, strpos($url, "/index.php") + strlen("/index.php"));
 		}
 		$cv = explode('/',$cv);
-		$argCount = count($cv);
 		if(!empty($cv)) {
-			$e = $c = $v = $a = "";
+			$a = "";
 			if(!empty($cv[4])) {
 				$e = $cv[1];
-				$c = $cv[2];
-				$v = $cv[3];
 				$a = $cv[4];
 				define("PLATFORM", $e);
 				define("CURR_CONTROLLER_PATH", CONTROLLER_PATH . PLATFORM . DS);
@@ -72,25 +69,18 @@ class Ceramic {
 			} elseif(!empty($cv[3])) {
 				if(in_array($cv[1], ENVIRONMENT_NAME)){
 					$e = $cv[1];
-					$c = $cv[2];
-					$v = $cv[3];
 					define("PLATFORM", $e);
 					define("CURR_CONTROLLER_PATH", CONTROLLER_PATH . PLATFORM . DS);
 					define("CURR_VIEW_PATH", VIEW_PATH . PLATFORM . DS);
 				} else {
-					$c = $cv[1];
-					$v = $cv[2];
 					$a = $cv[3];
 					define("CURR_CONTROLLER_PATH", CONTROLLER_PATH . DS);
 					define("CURR_VIEW_PATH", VIEW_PATH . DS);
 				}
 			} elseif(!empty($cv[2])) {
-				$c = $cv[1];
-				$v = $cv[2];
 				define("CURR_CONTROLLER_PATH", CONTROLLER_PATH . DS);
 				define("CURR_VIEW_PATH", VIEW_PATH . DS);
 			} else {
-				$c = (!empty($cv[1])) ? $cv[1] : $cv[0];
 				define("CURR_CONTROLLER_PATH", CONTROLLER_PATH . DS);
 				define("CURR_VIEW_PATH", VIEW_PATH . DS);
 			}
@@ -104,16 +94,14 @@ class Ceramic {
 			define("VIEW", $v);
 			define("ARGUMENT", $a);
 		} else {
-			define("PLATFORM", isset($_REQUEST['e']) ? $_REQUEST['e'] : '');
-			define("CONTROLLER", isset($_REQUEST['c']) ? $_REQUEST['c'] : '');
-			define("VIEW", isset($_REQUEST['v']) ? $_REQUEST['v'] : '');
-			define("ARGUMENT", isset($_REQUEST['a']) ? $_REQUEST['a'] : '');
+			define("PLATFORM", $_REQUEST['e'] ?? '');
+			define("CONTROLLER", $_REQUEST['c'] ?? '');
+			define("VIEW", $_REQUEST['v'] ?? '');
+			define("ARGUMENT", $_REQUEST['a'] ?? '');
 			define("CURR_CONTROLLER_PATH", CONTROLLER_PATH . PLATFORM . DS);
 			define("CURR_VIEW_PATH", VIEW_PATH . PLATFORM . DS);
 		}
-		/*define("APP_MODEL_PATH", VIEW_PATH);
-		define("APP_CONTROLLER_PATH", CONTROLLER_PATH);
-		define("APP_VIEW_PATH", VIEW_PATH);*/ // Load core classes
+
 		// Start session
 		session_start();
 	}
@@ -122,14 +110,9 @@ class Ceramic {
 		spl_autoload_register(array(__CLASS__, 'load'));
 	}
 
-	// Autoloading
-
 	private function dispatch() {
 		// Instantiate the controller class and call its action method
 
-		/*if(!headers_sent())
-			header("Content-type: {$this->contentType}");
-			//header("Content-type:image/png");*/
 		if(!headers_sent()) {
 			if(!empty($this->headers)) {
 				foreach($this->headers as $headers) {
@@ -142,15 +125,10 @@ class Ceramic {
 		}
 
 		if(!empty(CONTROLLER)) {
-			//$file = find_file(APP_PATH . "controllers", CONTROLLER . ".php");
 			$file = CONTROLLER_FILE;
 			$page = (!empty(VIEW))?CONTROLLER_PAGE.'/'.VIEW : CONTROLLER.'/__default';
 			$page_url = (empty(VIEW) || VIEW == '__default')?CONTROLLER_PAGE.'/' : $page;
 
-			/*if(empty(VIEW) || VIEW == '__default')
-				define('CURRENT_PAGE', CONTROLLER_PAGE);
-			else
-				define('CURRENT_PAGE', $page);*/
 			define('CURRENT_PAGE', $page_url);
 
 			if(file_exists($file)) {
@@ -198,8 +176,8 @@ class Ceramic {
 			$controller = config_item("default_controller");
 			$page = (!empty(VIEW))?$controller.'/'.VIEW : $controller.'/__default';
 			if(!empty($controller)) {
-				$file = find_file(APP_PATH . "controllers", "{$controller}.php");
-				if(file_exists($file)) {
+				$file = find_file(APP_PATH . "controllers", "$controller.php");
+				if(!empty($file) && file_exists($file)) {
 					if(!class_exists($controller)) {
 						include_once($file);
 						$controller_name = $controller;
@@ -248,12 +226,12 @@ class Ceramic {
 	// Define a custom load method
 
 	/**
-	 * Reference to the CI_Controller method.
-	 * Returns current CI instance object
+	 * Reference to the CM_Controller method.
+	 * Returns current CM instance object
 	 *
-	 * @return object
+	 * @return \Ceramic
 	 */
-	public static function &get_instance() {
+	public static function &get_instance(): Ceramic {
 		return self::$instance;
 	}
 
@@ -261,10 +239,10 @@ class Ceramic {
 
 	private static function load($classname) {
 		// Here simply autoload app’s controller and model classes
-		if(substr($classname, -10) == "Controller") {
+		if(str_ends_with($classname, "Controller")) {
 			// Controller
 			require_once CURR_CONTROLLER_PATH . "$classname.php";
-		} elseif(substr($classname, -5) == "Model") {
+		} elseif(str_ends_with($classname, "Model")) {
 			// Model
 			require_once MODEL_PATH . "$classname.php";
 		}

@@ -18,7 +18,7 @@ the power of two frameworks in one. Ceramic is released under its exclusive lice
 ### Core Requirements
 | Technology | Version        | Link                                                                   |
 |------------|----------------|------------------------------------------------------------------------|
-| PHP        | 8.0.0 - 8.1.0  | [www.php.net/downloads](https://www.php.net/downloads/)                |
+| PHP        | 8.0.0 - 8.0.12  | [www.php.net/downloads](https://www.php.net/downloads/)                |
 | MySQL      | 8.0.11+        | [downloads.mysql.com](https://downloads.mysql.com/archives/community/) |
 
 

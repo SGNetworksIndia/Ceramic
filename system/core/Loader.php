@@ -34,6 +34,8 @@
  * @since    Version 1.0.1
  * @filesource
  */
+use JetBrains\PhpStorm\Pure;
+
 defined('CORE_PATH') or exit('No direct script access allowed');
 
 /**
@@ -110,21 +112,21 @@ class Loader {
 		}
 	}
 
-	private function getViewFile(string $view) {
-		if(file_exists(VIEW_PATH . "{$view}.php"))
+	private function getViewFile(string $view): string {
+		if(file_exists(VIEW_PATH . "$view.php"))
 			$ext = "php";
-		elseif(file_exists(VIEW_PATH . "{$view}.htm"))
+		elseif(file_exists(VIEW_PATH . "$view.htm"))
 			$ext = "htm";
-		elseif(file_exists(VIEW_PATH . "{$view}.html"))
+		elseif(file_exists(VIEW_PATH . "$view.html"))
 			$ext = "html";
-		elseif(file_exists(VIEW_PATH . "{$view}.phtm"))
+		elseif(file_exists(VIEW_PATH . "$view.phtm"))
 			$ext = "phtm";
-		elseif(file_exists(VIEW_PATH . "{$view}.phtml"))
+		elseif(file_exists(VIEW_PATH . "$view.phtml"))
 			$ext = "phtml";
 		else
 			$ext = "";
 
-		return VIEW_PATH . "{$view}.{$ext}";
+		return VIEW_PATH . "$view.$ext";
 	}
 
 	/**
@@ -144,15 +146,15 @@ class Loader {
 					$this->view($this->header, $data);
 			}
 		}
-		if(file_exists(VIEW_PATH . "{$view}.php"))
+		if(file_exists(VIEW_PATH . "$view.php"))
 			$ext = "php";
-		elseif(file_exists(VIEW_PATH . "{$view}.htm"))
+		elseif(file_exists(VIEW_PATH . "$view.htm"))
 			$ext = "htm";
-		elseif(file_exists(VIEW_PATH . "{$view}.html"))
+		elseif(file_exists(VIEW_PATH . "$view.html"))
 			$ext = "html";
-		elseif(file_exists(VIEW_PATH . "{$view}.phtm"))
+		elseif(file_exists(VIEW_PATH . "$view.phtm"))
 			$ext = "phtm";
-		elseif(file_exists(VIEW_PATH . "{$view}.phtml"))
+		elseif(file_exists(VIEW_PATH . "$view.phtml"))
 			$ext = "phtml";
 		else
 			$ext = "";
@@ -167,9 +169,9 @@ class Loader {
 		if(is_null($loadingController)) {
 			$loadingController = $vc;
 			$baseURL = config_item('base_url');
-			$baseURL = (substr($baseURL, -1) == '/') ? $baseURL : $baseURL . '/';
+			$baseURL = (str_ends_with($baseURL, '/')) ? $baseURL : $baseURL . '/';
 			$this->cmdata['ceramic_version'] = CM_VERSION;
-			$this->cmdata['renderTime'] = $this->rendertime();
+			$this->cmdata['renderTime'] = $this->getRenderTime();
 			$this->cmdata['project_name'] = config_item('project_name');
 			$this->cmdata['project_version'] = config_item('project_version');
 			$this->cmdata['STATIC_DIR'] = STATIC_PATH;
@@ -181,12 +183,12 @@ class Loader {
 		} else {
 			if($vm == $loadingViewMethod) {
 				$loadingViewMethod = $vm;
-				$this->cmdata['renderTime'] += $this->rendertime();
+				$this->cmdata['renderTime'] += $this->getRenderTime();
 			}
 		}
 		if(empty($data) || !is_array($data)) {
 			$data = $this->cmdata;
-		} elseif(is_array($data) && !empty($data)) {
+		} elseif(count($data) > 0) {
 			$data = array_merge($data, $this->cmdata);
 		}
 		$cm_globals = get_globals();
@@ -224,14 +226,6 @@ class Loader {
 			}
 			echo $template->render($data);
 		} else {
-			/*$template = new Template($file);
-			$template->set("renderTime", $this->rendertime());
-			$template->set("ceramic_version", $data['ceramic_version']);
-			$template->set("title", $data['title']);
-			$template->set("title_prefix", $data['title_prefix']);
-			$template->set("project_name", $data['project_name']);
-			$template->set("project_version", $data['project_version']);
-			echo $template->render($data);*/
 			include_once($file);
 		}
 	}
@@ -239,12 +233,11 @@ class Loader {
 	/**
 	 * Get the number of seconds it took to render the page
 	 *
-	 * @param bool $reset If set to <b>TRUE</b>, the timer will be reset
 	 *
 	 * @return float The number of seconds it took to render the page
 	 */
-	private function rendertime($reset = false) {
-		return timer($reset);
+	private function getRenderTime(): float {
+		return timer();
 	}
 
 	public function __destruct() {
@@ -253,6 +246,7 @@ class Loader {
 
 	/**
 	 * @param bool $loadOnContext
+	 *
 	 * @return Loader
 	 */
 	public function setLoadOnContext(bool $loadOnContext): Loader {
@@ -275,18 +269,21 @@ class Loader {
 	 */
 	public function setContentType(string $contentType): Loader {
 		$this->contentType = $contentType;
-		$CM =& get_CMInstance();
+		$CM =& getCeramicInstance();
 		$CM->contentType = $this->contentType;
 		$this->header("Content-type: $contentType");
 		return $this;
 	}
 
 	/**
-	 * @param string $contentType
+	 * @param string $header
+	 * @param bool $replace
+	 * @param int|null $response_code
+	 *
 	 * @return Loader
 	 */
 	public function header(string $header, bool $replace = true, int $response_code = null): Loader {
-		$CM =& get_CMInstance();
+		$CM =& getCeramicInstance();
 		$CM->headers[] = array('header' => $header, 'replace' => $replace, 'code' => $response_code);
 		return $this;
 	}
@@ -297,7 +294,7 @@ class Loader {
 	 */
 	public function setUrlArgumentAsView(bool $urlArgumentAsView): Loader {
 		$this->urlArgumentAsView = $urlArgumentAsView;
-		$CM =& get_CMInstance();
+		$CM =& getCeramicInstance();
 		$CM->urlArgumentAsView = $this->urlArgumentAsView;
 		return $this;
 	}
@@ -308,7 +305,7 @@ class Loader {
 	 */
 	public function setUrlArgumentName(string $urlArgumentName): Loader {
 		$this->urlArgumentName = $urlArgumentName;
-		$CM =& get_CMInstance();
+		$CM =& getCeramicInstance();
 		$CM->urlArgumentName = $this->urlArgumentName;
 		return $this;
 	}
@@ -363,7 +360,7 @@ class Loader {
 	 *
 	 * @return \Template An instance of Template class
 	 */
-	public function getTemplate() {
+	#[Pure] public function getTemplate(): Template {
 		return new Template();
 	}
 
@@ -391,13 +388,12 @@ class Loader {
 	 * @param string $lib The name of the library to load
 	 */
 	public function library(string $lib) {
-		include LIB_PATH . "{$lib}.php";
+		include LIB_PATH . "$lib.php";
 		$className = strtolower(basename($lib));
 		$class = ucfirst($className);
-		//$class = str_replace('/', '\\', $lib);
 		if(class_exists($class)) {
 			if($this->loadOnContext)
-				get_instance()->$className = new $class(); else
+				getCMControllerInstance()->$className = new $class(); else
 				$this->$className = new $class();
 		}
 	}
@@ -417,29 +413,25 @@ class Loader {
 	 * @param string $model The name of the library to load
 	 */
 	public function model(string $model) {
-		$path = realpath(MODEL_PATH . "{$model}.php");
+		$path = realpath(MODEL_PATH . "$model.php");
 		$path = (!file_exists($path)) ? realpath(MODEL_PATH . "{$model}_model.php") : $path;
 		if(file_exists($path)) {
 			include_once $path;
-			$pathinfo = pathinfo($path);
-			$path = $pathinfo['dirname'] . DIRECTORY_SEPARATOR . $pathinfo['filename'];
+			$pathInfo = pathinfo($path);
+			$path = $pathInfo['dirname'] . DIRECTORY_SEPARATOR . $pathInfo['filename'];
 
 			$class = rtrim(str_replace(MODEL_PATH, '', $path), '/\\');
 			$className = str_replace(array('_model', 'model_'), '', strtolower(basename($class)));
 			if(class_exists($class)) {
-				/*if($this->loadOnContext) {
-					get_instance()->$className = new $class();
-				} else
-					$this->$className = new $class();*/
 				if($this->loadOnContext) {
-					get_instance()->$className = Model::getInstance($class);
+					getCMControllerInstance()->$className = Model::getInstance($class);
 				} else
 					$this->$className = Model::getInstance($class);
 			} else {
-				show_error("The class related to the model <b>{$model}</b> not found!");
+				show_error("The class related to the model <b>$model</b> not found!");
 			}
 		} else {
-			show_error("The file related to the model <b>{$model}</b> not found!");
+			show_error("The file related to the model <b>$model</b> not found!");
 		}
 	}
 
@@ -448,19 +440,19 @@ class Loader {
 	 *
 	 * @param mixed $params Database configuration options
 	 * @param bool $return Whether to return the database object
-	 * @param bool $query_builder Whether to enable Query Builder
+	 * @param bool|null $query_builder Whether to enable Query Builder
 	 *                    (overrides the configuration setting)
 	 *
 	 * @return object|bool Database object if $return is set to TRUE,
 	 *                    FALSE on failure, CI_Loader instance in any other case
 	 */
-	public function database($params = '', $return = FALSE, $query_builder = NULL) {
+	public function database(string $params = '', bool $return = false, bool $query_builder = null): object|bool {
 		// Grab the super object
-		$CI =& get_instance();
+		$CMController =& getCMControllerInstance();
 
 		// Do we even need to load the database class?
-		if($return === FALSE && $query_builder === NULL && isset($CI->db) && is_object($CI->db) && !empty($CI->db->conn_id)) {
-			return FALSE;
+		if($return === false && $query_builder === null && isset($CMController->db) && is_object($CMController->db) && !empty($CMController->db->conn_id)) {
+			return false;
 		}
 
 		require_once(FRAMEWORK_PATH . 'database/DB.php');
@@ -471,10 +463,10 @@ class Loader {
 
 		// Initialize the db variable. Needed to prevent
 		// reference errors with some configurations
-		$CI->db = '';
+		$CMController->db = '';
 
 		// Load the DB class
-		$CI->db =& DB($params, $query_builder);
+		$CMController->db =& DB($params, $query_builder);
 		return $this;
 	}
 
@@ -485,7 +477,7 @@ class Loader {
 	 *
 	 * @return    array A list of all package paths.
 	 */
-	public function get_package_paths($include_base = false) {
+	public function get_package_paths(bool $include_base = false): array {
 		return ($include_base === true) ? $this->_cm_library_paths : $this->_cm_model_paths;
 	}
 }

@@ -96,4 +96,3 @@ $db['default'] = array(
 
 $active_group = 'default';
 $query_builder = TRUE;
-?>

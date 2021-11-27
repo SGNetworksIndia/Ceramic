@@ -1,0 +1,4 @@
+<?php
+$mimes = [
+	"text/html",
+];

@@ -49,7 +49,7 @@ class Model {
 		//	If you're here because you're getting an error message
 		//	saying 'Undefined Property: system/core/Model.php', it's
 		//	most likely a typo in your model code.
-		return get_instance()->$key;
+		return getCMControllerInstance()->$key;
 	}
 
 	/**
@@ -65,7 +65,7 @@ class Model {
 	 */
 	protected function load_database($params = '', $return = false, $query_builder = null): object|bool {
 		// Grab the super object
-		$CM =& get_instance();
+		$CM =& getCMControllerInstance();
 
 		// Do we even need to load the database class?
 		if($return === false && $query_builder === null && isset($CM->db) && is_object($CM->db) && !empty($CM->db->conn_id)) {
