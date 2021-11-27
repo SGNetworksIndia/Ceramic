@@ -6,10 +6,10 @@ defined('CORE_PATH') or exit('No direct script access allowed');
 /**
  * @property \Autoindex $autoindex
  * @property \Input $input
- * @property \Session $session
+ * @property Ceramic\Storage\Session\Session $session
  */
 class Demo extends Controller {
-	private string $copyright = "Ceramic";
+	private string $copyright = "Copyright &copy; Ceramic 2021. All rights reserved.";
 
 	public function __common() {
 		$this->forceHTTPS(true);
@@ -19,7 +19,7 @@ class Demo extends Controller {
 		$cmtemplate = $this->load->getTemplate();
 		$cmtemplate->set("cmproduct", "Ceramic");
 		$cmtemplate->set("cmfeature", "AutoIndex");
-		$cmtemplate->set("copyright", "Copyright &copy; {$this->copyright} 2020. All rights reserved.");
+		$cmtemplate->set("copyright", $this->copyright);
 		$this->load->setTemplate($cmtemplate);
 		$this->load->loadOnContext = true;
 		$this->load->library('autoindex');
@@ -32,19 +32,19 @@ class Demo extends Controller {
 		$cmtemplate = $this->load->getTemplate();
 		$cmtemplate->set("cmproduct", "Ceramic");
 		$cmtemplate->set("cmfeature", "CAPTCHA Helper");
-		$cmtemplate->set("copyright", "Copyright &copy; {$this->copyright} 2020. All rights reserved.");
+		$cmtemplate->set("copyright", $this->copyright);
 		$this->load->setTemplate($cmtemplate);
 
 		$this->load->loadOnContext = true;
 		$this->load->library('input');
 		$this->load->library('form_validation');
 		$this->load->helper('captcha');
-		$this->load->library('Session/session');
+		$this->load->library('Storage/Session/Session');
 
 		// If captcha form is submitted
 		if($this->input->post('submit')) {
 			$inputCaptcha = $this->input->post('captcha');
-			$sessCaptcha = $this->session->userdata('captchaCode');
+			$sessCaptcha = $this->session->get('captchaCode');
 			if($inputCaptcha === $sessCaptcha) {
 				$this->user_success('Captcha code matched.');
 			} else {
@@ -54,14 +54,14 @@ class Demo extends Controller {
 		$captcha = create_captcha();
 		$data['captcha'] = $captcha;
 		// Unset previous captcha and set new captcha word
-		$this->session->unset_userdata('captchaCode');
-		$this->session->set_userdata('captchaCode', $data['captcha']['word']);
+		$this->session->unset('captchaCode');
+		$this->session->set('captchaCode', $data['captcha']['word']);
 		$this->load->view('demo/header', $data);
 		$this->load->view('demo/captcha', $data);
 		$this->load->view('demo/footer', $data);
 	}
 
-	private function user_success($msg, $heading = 'Success') {
+	private function user_success(string $msg, string $heading = 'Success') {
 		if($heading) {
 			$html = '<h3 style="background-color: #36f146; padding: 10px 15px; margin: 0; border-radius: 10px 10px 0 0; color: #fff;">' . $heading . '</h3>';
 			$html .= '<div style="border:1px solid #36f146; border-radius: 0 0 10px 10px; padding: 15px 0 15px 15px;">';
@@ -73,7 +73,7 @@ class Demo extends Controller {
 		echo $html;
 	}
 
-	private function user_error($msg, $heading = 'Error') {
+	private function user_error(string $msg, string $heading = 'Error') {
 		if($heading) {
 			$html = '<h3 style="background-color: #f13646; padding: 10px 15px; margin: 0; border-radius: 10px 10px 0 0; color: #fff;">' . $heading . '</h3>';
 			$html .= '<div style="border:1px solid #f13646; border-radius: 0 0 10px 10px; padding: 15px 0 15px 15px;">';
@@ -89,7 +89,7 @@ class Demo extends Controller {
 		$cmtemplate = $this->load->getTemplate();
 		$cmtemplate->set("cmproduct", "Ceramic");
 		$cmtemplate->set("cmfeature", "Template Engine");
-		$cmtemplate->set("copyright", "Copyright &copy; {$this->copyright} 2020. All rights reserved.");
+		$cmtemplate->set("copyright", $this->copyright);
 
 		$template = $this->load->getTemplate();
 		/*
@@ -120,8 +120,8 @@ class Demo extends Controller {
 		$captcha = create_captcha();
 
 		// Unset previous captcha and set new captcha word
-		$this->session->unset_userdata('captchaCode');
-		$this->session->set_userdata('captchaCode', $captcha['word']);
+		$this->session->unset('captchaCode');
+		$this->session->set('captchaCode', $captcha['word']);
 
 		// Display captcha image
 		echo $captcha['image'];

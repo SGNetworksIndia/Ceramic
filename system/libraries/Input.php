@@ -1,5 +1,5 @@
 <?php
-defined('CORE_PATH') OR exit('No direct script access allowed');
+defined('CORE_PATH') or exit('No direct script access allowed');
 
 class Input {
 	private $get, $post, $session, $cookie;
@@ -12,7 +12,7 @@ class Input {
 	}
 
 	public function get(string $param = '', string $default = '') {
-		if(is_array($this->get) && !empty($this->get)){
+		if(is_array($this->get) && !empty($this->get)) {
 			if(!empty($param)) {
 				$return = (array_key_exists($param, $this->get)) ? $this->get[$param] : $default;
 			} else {
@@ -24,7 +24,7 @@ class Input {
 	}
 
 	public function post(string $param = '', string $default = '') {
-		if(is_array($this->post) && !empty($this->post)){
+		if(is_array($this->post) && !empty($this->post)) {
 			if(!empty($param)) {
 				$return = (array_key_exists($param, $this->post)) ? $this->post[$param] : $default;
 			} else {
@@ -36,7 +36,7 @@ class Input {
 	}
 
 	public function session(string $param = '', string $default = '') {
-		if(is_array($this->session) && !empty($this->session)){
+		if(is_array($this->session) && !empty($this->session)) {
 			if(!empty($param)) {
 				$return = (array_key_exists($param, $this->session)) ? $this->session[$param] : $default;
 			} else {
@@ -48,7 +48,7 @@ class Input {
 	}
 
 	public function cookie(string $param = '', string $default = '') {
-		if(is_array($this->cookie) && !empty($this->cookie)){
+		if(is_array($this->cookie) && !empty($this->cookie)) {
 			if(!empty($param)) {
 				$return = (array_key_exists($param, $this->cookie)) ? $this->cookie[$param] : $default;
 			} else {
@@ -57,6 +57,10 @@ class Input {
 			return $return;
 		} else
 			return false;
+	}
+
+	public function setSession(string $key, ?string $value = null) {
+		$_SESSION[$key] = $value;
 	}
 
 	/**
@@ -75,7 +79,7 @@ class Input {
 	 *
 	 * @return    void
 	 */
-	public function set_cookie($name, $value = '', $expire = '', $domain = '', $path = '/', $prefix = '', $secure = null, $httponly = null) {
+	public function setCookie($name, $value = '', $expire = '', $domain = '', $path = '/', $prefix = '', $secure = null, $httponly = null) {
 		if(is_array($name)) {
 			// always leave 'name' in last place, as the loop will break otherwise, due to $$item
 			foreach(array('value', 'expire', 'domain', 'path', 'prefix', 'secure', 'httponly', 'name') as $item) {
@@ -108,12 +112,12 @@ class Input {
 	 *
 	 * Return the request method
 	 *
-	 * @param	bool	$upper	Whether to return in upper or lower case
-	 *				(default: FALSE)
-	 * @return 	string
+	 * @param bool $upper Whether to return in upper or lower case
+	 *                (default: FALSE)
+	 *
+	 * @return    string
 	 */
-	public function method($upper = FALSE)
-	{
+	public function method($upper = false) {
 		return ($upper)
 			? strtoupper($this->server('REQUEST_METHOD'))
 			: strtolower($this->server('REQUEST_METHOD'));
@@ -122,12 +126,12 @@ class Input {
 	/**
 	 * Fetch an item from the SERVER array
 	 *
-	 * @param	mixed	$index		Index for item to be fetched from $_SERVER
-	 * @param	bool	$xss_clean	Whether to apply XSS filtering
-	 * @return	mixed
+	 * @param mixed $index Index for item to be fetched from $_SERVER
+	 * @param bool $xss_clean Whether to apply XSS filtering
+	 *
+	 * @return    mixed
 	 */
-	public function server($index, $xss_clean = NULL)
-	{
+	public function server($index, $xss_clean = null) {
 		return $_SERVER[$index];
 	}
 
@@ -138,8 +142,9 @@ class Input {
 	 *
 	 * Allows read access to protected properties
 	 *
-	 * @param	string	$name
-	 * @return	mixed
+	 * @param string $name
+	 *
+	 * @return    mixed
 	 */
 	/*public function __get($name)
 	{

@@ -1,10 +1,10 @@
 <?php
 /**
- * @package    Ceramic
+ * @since    Version 1.0.1
  * @author    Sagnik Ganguly
  * @copyright    Copyright (c) 2020, Sagnik Ganguly
  * @copyright    Copyright (c) 202, SGNetworks (https://sgn.heliohost.org/)
- * @since    Version 1.0.1
+ * @package    Ceramic
  * @filesource
  */
 
@@ -40,6 +40,18 @@ defined('CORE_PATH') or defined('INDEX_PAGE') or exit('No direct script access a
 #[Pure] function &getCeramicInstance(): Ceramic {
 	return Ceramic::get_instance();
 }
+
+spl_autoload_register(function($className) {
+	$className = str_replace("\\", DS, $className);
+	if(str_contains($className, 'Ceramic')) {
+		if(!class_exists($className)) {
+			$className = str_replace('Ceramic', '', $className);
+			$file = FRAMEWORK_PATH . "libraries" . DS . "$className.php";
+			if(file_exists($file))
+				require_once $file;
+		}
+	}
+});
 
 if(!function_exists('is_php')) {
 	/**
@@ -175,7 +187,7 @@ function find_mvc($url): array {
 			}
 		}
 	} else {
-		$c = CONTROLLER_PATH . config_item('default_controller') .".php";
+		$c = CONTROLLER_PATH . config_item('default_controller') . ".php";
 		$v = "__default";
 	}
 

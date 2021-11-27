@@ -26,34 +26,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
- * @author	EllisLab Dev Team
- * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
- * @copyright	Copyright (c) 2014 - 2018, British Columbia Institute of Technology (http://bcit.ca/)
- * @license	http://opensource.org/licenses/MIT	MIT License
- * @link	https://codeigniter.com
- * @since	Version 3.0.0
+ * @package    CodeIgniter
+ * @author    EllisLab Dev Team
+ * @copyright    Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
+ * @copyright    Copyright (c) 2014 - 2018, British Columbia Institute of Technology (http://bcit.ca/)
+ * @license    http://opensource.org/licenses/MIT	MIT License
+ * @link    https://codeigniter.com
+ * @since    Version 3.0.0
  * @filesource
  */
-defined('CORE_PATH') OR exit('No direct script access allowed');
+
+namespace Ceramic\Storage;
+
+defined('CORE_PATH') or exit('No direct script access allowed');
 
 /**
- * SessionHandlerInterface
+ * CMSessionHandler
  *
  * PHP 5.4 compatibility interface
  *
- * @package	CodeIgniter
- * @subpackage	Libraries
- * @category	Sessions
- * @author	Andrey Andreev
- * @link	https://codeigniter.com/user_guide/libraries/sessions.html
+ * @package    Ceramic
+ * @subpackage    Libraries
+ * @category    Sessions
+ * @author    Sagnik Ganguly
+ * @link    https://docs.ceramic.eu.org/libraries/sessions.html
  */
-interface SessionHandlerInterface {
+interface CMStorageHandler {
+	public function open(string $name, ?string $path = null): bool;
 
-	public function open($save_path, $name);
+	public function read(string $key): ?string;
+
+	public function write(string $key, ?string $value = null): bool;
+
+	public function delete(string $key): bool;
+
 	public function close();
-	public function read($session_id);
-	public function write($session_id, $session_data);
-	public function destroy($session_id);
-	public function gc($maxlifetime);
+
+	public function destroy(string $name);
+
+	public function gc(int $maxLifetime);
 }

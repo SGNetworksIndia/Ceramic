@@ -18,14 +18,14 @@ the power of two frameworks in one. Ceramic is released under its exclusive lice
 ### Core Requirements
 | Technology | Version        | Link                                                                   |
 |------------|----------------|------------------------------------------------------------------------|
-| PHP        | 8.0.0 - 8.0.12  | [www.php.net/downloads](https://www.php.net/downloads/)                |
+| PHP        | 8.1.0          | [www.php.net/downloads](https://www.php.net/downloads/)                |
 | MySQL      | 8.0.11+        | [downloads.mysql.com](https://downloads.mysql.com/archives/community/) |
 
 
 ### CodeIgniter Compatibility
 | Version (Minimum) | Version (Maximum) | Link                                                          |
 |-------------------|-------------------|---------------------------------------------------------------|
-| 3.1.7             | 4.1.5             | [CI 4](https://github.com/codeigniter4/CodeIgniter4/releases) |
+| 4.1.4             | 4.1.5             | [CI 4](https://github.com/codeigniter4/CodeIgniter4/releases) |
 
 
 ## INSTALLATION
@@ -56,17 +56,23 @@ To install and use CodeIgniter Helpers and Libraries, just copy the helper or li
   ('library_name')`
 
 
+**_Support for CodeIgniter `Session` library has been dropped from the release of `Ceramic v1.1.5`, as a replacement for the library `Ceramic` now have its own `Session` library. with other storage
+related libraries. The `Session` library can be instantiated by calling `$this->load->library('Storage/Session/Session')` from a Controller. See
+`/application/controllers/Demo::captcha()` for more details._**
+
+
 ## UPCOMING FEATURES
 There are many features are staged to be implemented in the upcoming releases. The currently planned features awaiting to be implemented are:
 
 1. Router
 2. RESTful Resource Handling
-3. Hooks
-4. Services (background php classes) & Web Services
-5. Caching
-6. Asynchronous Requests (AJAX)
-7. HTTP/2 Server Push (Server Sent Events)
-8. Localization
+3. Improvement on Templating feature (add support for if...else blocks, loops, etc.)
+4. Hooks
+5. Services (background php classes) & Web Services
+6. Caching
+7. Asynchronous Requests (AJAX)
+8. HTTP/2 Server Push (Server Sent Events)
+9. Localization
 
 
 ## CONTRIBUTING

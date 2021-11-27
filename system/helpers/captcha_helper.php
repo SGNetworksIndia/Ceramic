@@ -206,12 +206,16 @@ if(!function_exists('create_captcha')) {
 		for($i = 0, $cp = ($circles * $points) - 1; $i < $cp; $i++) {
 			$theta += $thetac;
 			$rad = $radius * ($i / $points);
-			$x = ($rad * cos($theta)) + $x_axis;
-			$y = ($rad * sin($theta)) + $y_axis;
-			$theta += $thetac;
 			$rad1 = $radius * (($i + 1) / $points);
-			$x1 = ($rad1 * cos($theta)) + $x_axis;
-			$y1 = ($rad1 * sin($theta)) + $y_axis;
+
+			$x = (int)($rad * cos($theta)) + $x_axis;
+			$y = (int)($rad * sin($theta)) + $y_axis;
+
+			$theta += $thetac;
+
+			$x1 = (int)($rad1 * cos($theta)) + $x_axis;
+			$y1 = (int)($rad1 * sin($theta)) + $y_axis;
+
 			imageline($im, $x, $y, $x1, $y1, $colors['grid']);
 			$theta -= $thetac;
 		}
@@ -225,7 +229,7 @@ if(!function_exists('create_captcha')) {
 			$y = 0;
 		} else {
 			($font_size > 30) && $font_size = 30;
-			$x = mt_rand(0, $img_width / ($length / 1.5));
+			$x = mt_rand(0, (int)($img_width / ($length / 1.5)));
 			$y = $font_size + 2;
 		}
 		for($i = 0; $i < $length; $i++) {

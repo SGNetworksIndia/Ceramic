@@ -81,11 +81,12 @@ defined('CORE_PATH') OR exit('No direct script access allowed');
 			<p>The corresponding controller for this page is found at:</p>
 			<code>application/controllers/Welcome.php</code>
 
-			<p>If you are exploring Ceramic for the very first time, you should start by reading the <a href="user_guide/">User Guide</a>.</p>
-			<p>Or you can check out the <a href="Demo/">Examples</a> and start modifying them.</p>
+			<p>If you are exploring Ceramic for the very first time, you should start by reading the <a href="https://docs.ceramic.eu.org/">User Guide</a>.</p>
+			<p>Or you can check out the <a href="demo/">Examples</a> and start modifying them.</p>
 		</div>
 
-		<p class="footer"><span style="float: left;font-weight: bold;">{{copyright}}</span> Page rendered in  <strong>{{renderTime}}</strong> seconds. <?php echo  (ENVIRONMENT === ENVIRONMENT_DEVELOPMENT) ?  'Ceramic Version <strong>' . CM_VERSION . '</strong>' : '' ?></p>
+		<p class="footer"><span style="float: left;font-weight: bold;">{{copyright}}</span> Page rendered in
+			<strong>{{renderTime}}</strong> seconds. <?php echo (ENVIRONMENT === ENVIRONMENT_DEVELOPMENT) ? 'Ceramic Version <strong>' . CM_VERSION . '</strong>' : '' ?></p>
 	</div>
 
 	</body>
