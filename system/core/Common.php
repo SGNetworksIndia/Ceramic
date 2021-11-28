@@ -1,10 +1,10 @@
 <?php
 /**
- * @package    Ceramic
+ * @since    Version 1.0.1
  * @author    Sagnik Ganguly
  * @copyright    Copyright (c) 2020, Sagnik Ganguly
  * @copyright    Copyright (c) 202, SGNetworks (https://sgn.heliohost.org/)
- * @since    Version 1.0.1
+ * @package    Ceramic
  * @filesource
  */
 
@@ -78,23 +78,6 @@ function rsearch(string $folder, string $pattern, bool $multiple = false): strin
 	return $fileList;
 }
 
-function fileExists(string $fileName): bool {
-	static $dirList = [];
-	if(file_exists($fileName)) {
-		return true;
-	}
-	$directoryName = dirname($fileName);
-	if(!isset($dirList[$directoryName])) {
-		$fileArray = glob($directoryName . '/*', GLOB_NOSORT);
-		$dirListEntry = [];
-		foreach($fileArray as $file) {
-			$dirListEntry[strtolower($file)] = true;
-		}
-		$dirList[$directoryName] = $dirListEntry;
-	}
-	return isset($dirList[$directoryName][strtolower($fileName)]);
-}
-
 // recursive directory scan
 function recursiveScan(string $dir, string $pattern = '/*'): array {
 	$tree = glob(rtrim($dir, '/') . $pattern);
@@ -110,6 +93,45 @@ function recursiveScan(string $dir, string $pattern = '/*'): array {
 		}
 	}
 	return $files;
+}
+
+function fileExists(string $fileName): bool {
+	static $dirList = [];
+	if(file_exists($fileName)) {
+		return true;
+	}
+	if(!config_item('case_insensitive'))
+		return false;
+	$directoryName = dirname($fileName);
+	if(!isset($dirList[$directoryName])) {
+		$fileArray = glob($directoryName . '/*', GLOB_NOSORT);
+		$dirListEntry = [];
+		foreach($fileArray as $file) {
+			$dirListEntry[strtolower($file)] = true;
+		}
+		$dirList[$directoryName] = $dirListEntry;
+	}
+	return isset($dirList[$directoryName][strtolower($fileName)]);
+}
+
+function findFile(string $fileName): string {
+	static $dirList = [];
+	if(file_exists($fileName)) {
+		return $fileName;
+	}
+	if(!config_item('case_insensitive'))
+		return $fileName;
+
+	$directoryName = dirname($fileName);
+	if(!isset($dirList[$directoryName])) {
+		$fileArray = glob($directoryName . '/*', GLOB_NOSORT);
+		$dirListEntry = [];
+		foreach($fileArray as $file) {
+			$dirListEntry[strtolower(basename($file))] = $file;
+		}
+		$dirList[$directoryName] = $dirListEntry;
+	}
+	return $dirList[$directoryName][strtolower(basename($fileName))];
 }
 
 /**
@@ -175,7 +197,7 @@ function find_mvc($url): array {
 			}
 		}
 	} else {
-		$c = CONTROLLER_PATH . config_item('default_controller') .".php";
+		$c = CONTROLLER_PATH . config_item('default_controller') . ".php";
 		$v = "__default";
 	}
 
