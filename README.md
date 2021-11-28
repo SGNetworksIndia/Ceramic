@@ -12,7 +12,7 @@ the power of two frameworks in one. Ceramic is released under its exclusive lice
 
 
 ## REQUIREMENTS
-* **Ceramic Version**: 1.1.0
+* **Ceramic Version**: 1.1.5
 
 
 ### Core Requirements
