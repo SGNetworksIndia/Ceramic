@@ -90,23 +90,6 @@ function rsearch(string $folder, string $pattern, bool $multiple = false): strin
 	return $fileList;
 }
 
-function fileExists(string $fileName): bool {
-	static $dirList = [];
-	if(file_exists($fileName)) {
-		return true;
-	}
-	$directoryName = dirname($fileName);
-	if(!isset($dirList[$directoryName])) {
-		$fileArray = glob($directoryName . '/*', GLOB_NOSORT);
-		$dirListEntry = [];
-		foreach($fileArray as $file) {
-			$dirListEntry[strtolower($file)] = true;
-		}
-		$dirList[$directoryName] = $dirListEntry;
-	}
-	return isset($dirList[$directoryName][strtolower($fileName)]);
-}
-
 // recursive directory scan
 function recursiveScan(string $dir, string $pattern = '/*'): array {
 	$tree = glob(rtrim($dir, '/') . $pattern);
@@ -124,35 +107,43 @@ function recursiveScan(string $dir, string $pattern = '/*'): array {
 	return $files;
 }
 
-/**
- * find files matching a pattern
- * using PHP "glob" function and recursion
- *
- * @param string $dir - directory to start with
- * @param string $filename
- *
- * @return string|null containing all pattern-matched files
- */
-function find_file(string $dir, string $filename): ?string {
-	$files = recursiveScan($dir);
-	$file = null;
-	foreach($files as $f) {
-		if(config_item('case_insensitive')) {
-			$f = strtolower($f);
-			$filename = strtolower($filename);
-		}
-		$filename = basename($filename);
-		$path = $f;
-		if(is_dir($path)) {
-			$file = find_file($path, $filename);
-		} elseif(is_file($path) && fileExists($path)) {
-			$f = basename($f);
-			if($f == $filename) {
-				$file = $path;
-			}
-		}
+function fileExists(string $fileName): bool {
+	static $dirList = [];
+	if(file_exists($fileName)) {
+		return true;
 	}
-	return $file;
+	if(!config_item('case_insensitive'))
+		return false;
+	$directoryName = dirname($fileName);
+	if(!isset($dirList[$directoryName])) {
+		$fileArray = glob($directoryName . '/*', GLOB_NOSORT);
+		$dirListEntry = [];
+		foreach($fileArray as $file) {
+			$dirListEntry[strtolower($file)] = true;
+		}
+		$dirList[$directoryName] = $dirListEntry;
+	}
+	return isset($dirList[$directoryName][strtolower($fileName)]);
+}
+
+function findFile(string $fileName): string {
+	static $dirList = [];
+	if(file_exists($fileName)) {
+		return $fileName;
+	}
+	if(!config_item('case_insensitive'))
+		return $fileName;
+
+	$directoryName = dirname($fileName);
+	if(!isset($dirList[$directoryName])) {
+		$fileArray = glob($directoryName . '/*', GLOB_NOSORT);
+		$dirListEntry = [];
+		foreach($fileArray as $file) {
+			$dirListEntry[strtolower(basename($file))] = $file;
+		}
+		$dirList[$directoryName] = $dirListEntry;
+	}
+	return $dirList[$directoryName][strtolower(basename($fileName))];
 }
 
 #[ArrayShape(['controller' => "string[]", 'view' => "array|string|string[]"])]
