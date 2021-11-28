@@ -122,14 +122,9 @@ class Ceramic {
 		spl_autoload_register(array(__CLASS__, 'load'));
 	}
 
-	// Autoloading
-
 	private function dispatch() {
 		// Instantiate the controller class and call its action method
 
-		/*if(!headers_sent())
-			header("Content-type: {$this->contentType}");
-			//header("Content-type:image/png");*/
 		if(!headers_sent()) {
 			if(!empty($this->headers)) {
 				foreach($this->headers as $headers) {
@@ -142,20 +137,16 @@ class Ceramic {
 		}
 
 		if(!empty(CONTROLLER)) {
-			//$file = find_file(APP_PATH . "controllers", CONTROLLER . ".php");
-			$file = CONTROLLER_FILE;
-			$page = (!empty(VIEW))?CONTROLLER_PAGE.'/'.VIEW : CONTROLLER.'/__default';
-			$page_url = (empty(VIEW) || VIEW == '__default')?CONTROLLER_PAGE.'/' : $page;
+			$fileName = CONTROLLER_FILE;
+			$page = (!empty(VIEW)) ? CONTROLLER_PAGE . '/' . VIEW : CONTROLLER . '/__default';
+			$page_url = (empty(VIEW) || VIEW == '__default') ? CONTROLLER_PAGE . '/' : $page;
 
-			/*if(empty(VIEW) || VIEW == '__default')
-				define('CURRENT_PAGE', CONTROLLER_PAGE);
-			else
-				define('CURRENT_PAGE', $page);*/
 			define('CURRENT_PAGE', $page_url);
 
-			if(file_exists($file)) {
+			if(fileExists($fileName)) {
+				$filePath = $fileName;
 				if(!class_exists(CONTROLLER)) {
-					include_once($file);
+					include_once($filePath);
 					$controller_name = CONTROLLER;
 					$controller = new $controller_name;
 					if(method_exists($controller, '__common')) {
@@ -198,10 +189,11 @@ class Ceramic {
 			$controller = config_item("default_controller");
 			$page = (!empty(VIEW))?$controller.'/'.VIEW : $controller.'/__default';
 			if(!empty($controller)) {
-				$file = find_file(APP_PATH . "controllers", "{$controller}.php");
-				if(file_exists($file)) {
+				$fileName = APP_PATH . "controllers" . DS . "$controller.php";
+				if(fileExists($fileName)) {
+					$filePath = findFile($fileName);
 					if(!class_exists($controller)) {
-						include_once($file);
+						include_once($filePath);
 						$controller_name = $controller;
 						$controller = new $controller_name;
 						if(method_exists($controller, '__common')) {

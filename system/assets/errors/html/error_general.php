@@ -1,25 +1,19 @@
 <?php
 defined('CORE_PATH') or exit('No direct script access allowed');
 $exceptions = array(E_ERROR => "error", E_WARNING => 'warning', E_NOTICE => 'notice');
-$colors = array("notice" => "#004f9e", "warning" => "#9b6f01", "error" => "#990000", "typeerror" => "#990000");
-$bgcolors = array("notice" => "#007bff", "warning" => "#ffc107", "error" => "#f13646", "typeerror" => "#f13646");
-/*$type = get_parent_class($exception);
-$type = empty($type) ? get_class($exception) : $type;
+$colors = array("notice" => "#004f9e", "warning" => "#9b6f01", "error" => "#990000", "typeerror" => "#990000", "general" => "#990000");
+$bgcolors = array("notice" => "#007bff", "warning" => "#ffc107", "error" => "#f13646", "typeerror" => "#f13646", "general" => "#f13646");
+
+$type = 'General';
 $type = strtolower($type);
-if($type == "error" || $type == 'errorexception') {
-	$color = (array_key_exists($type, $colors)) ? $type : $exceptions[$exception->getSeverity()];
-	$bgcolor = (array_key_exists($type, $bgcolors)) ? $type : $exceptions[$exception->getSeverity()];
-} else {
-	if(!empty($type))
-		$color = $bgcolor = $type;
-	else
-		$color = $bgcolor = 'notice';
-}
+if(!empty($type))
+	$color = $bgcolor = $type;
+else
+	$color = $bgcolor = 'notice';
 $color = $colors[$color];
-$bgcolor = $bgcolors[$bgcolor];*/
-$color = '#444';
-$bgcolor = '#fff';
+$bgcolor = $bgcolors[$bgcolor];
 $exception = null;
+
 $type = 'General';
 $file = $line = '';
 ?>

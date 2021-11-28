@@ -391,14 +391,21 @@ class Loader {
 	 * @param string $lib The name of the library to load
 	 */
 	public function library(string $lib) {
-		include LIB_PATH . "{$lib}.php";
-		$className = strtolower(basename($lib));
-		$class = ucfirst($className);
-		//$class = str_replace('/', '\\', $lib);
-		if(class_exists($class)) {
-			if($this->loadOnContext)
-				get_instance()->$className = new $class(); else
-				$this->$className = new $class();
+		$fileName = LIB_PATH . "$lib.php";
+		if(fileExists($fileName)) {
+			$filePath = findFile($fileName);
+			include_once $filePath;
+
+			$className = strtolower(basename($lib));
+			$class = ucfirst($className);
+			if(class_exists($class)) {
+				if($this->loadOnContext)
+					getCMControllerInstance()->$className = new $class();
+				else
+					$this->$className = new $class();
+			}
+		} else {
+			show_error("The library <b>$lib</b> not found! If you're sure the file exists, check case-sesitivity of the library or set configuration variable <b>case_insensitive</b> to <b>TRUE</b>");
 		}
 	}
 
@@ -408,7 +415,13 @@ class Loader {
 	 * @param string $helper The name of the helper to load
 	 */
 	public function helper(string $helper) {
-		include HELPER_PATH . "{$helper}_helper.php";
+		$fileName = HELPER_PATH . "{$helper}_helper.php";
+		if(fileExists($fileName)) {
+			$filePath = findFile($fileName);
+			include_once $filePath;
+		} else {
+			show_error("The helper <b>$helper</b> not found! If you're sure the file exists, check case-sesitivity of the library or set configuration variable <b>case_insensitive</b> to <b>TRUE</b>");
+		}
 	}
 
 	/**
@@ -417,29 +430,25 @@ class Loader {
 	 * @param string $model The name of the library to load
 	 */
 	public function model(string $model) {
-		$path = realpath(MODEL_PATH . "{$model}.php");
-		$path = (!file_exists($path)) ? realpath(MODEL_PATH . "{$model}_model.php") : $path;
-		if(file_exists($path)) {
-			include_once $path;
-			$pathinfo = pathinfo($path);
-			$path = $pathinfo['dirname'] . DIRECTORY_SEPARATOR . $pathinfo['filename'];
+		$fileName = MODEL_PATH . "$model.php";
+		if(fileExists($fileName)) {
+			$filePath = findFile($fileName);
+			include_once $filePath;
+			$pathInfo = pathinfo($filePath);
+			$path = $pathInfo['dirname'] . DIRECTORY_SEPARATOR . $pathInfo['filename'];
 
 			$class = rtrim(str_replace(MODEL_PATH, '', $path), '/\\');
 			$className = str_replace(array('_model', 'model_'), '', strtolower(basename($class)));
 			if(class_exists($class)) {
-				/*if($this->loadOnContext) {
-					get_instance()->$className = new $class();
-				} else
-					$this->$className = new $class();*/
 				if($this->loadOnContext) {
-					get_instance()->$className = Model::getInstance($class);
+					getCMControllerInstance()->$className = Model::getInstance($class);
 				} else
 					$this->$className = Model::getInstance($class);
 			} else {
-				show_error("The class related to the model <b>{$model}</b> not found!");
+				show_error("The class related to the model <b>$model</b> not found!");
 			}
 		} else {
-			show_error("The file related to the model <b>{$model}</b> not found!");
+			show_error("The file related to the model <b>$model</b> not found! If you're sure the file exists, check case-sesitivity of the library or set configuration variable <b>case_insensitive</b> to <b>TRUE</b>");
 		}
 	}
 
