@@ -95,10 +95,10 @@ Or if you found a bug or error which need to be fixed create an issue at [issues
 **_Ceramic_ is being developed by _Team Ceramic_ in association with _[SGNetworks](https://github.com/SGNetworksIndia/)_ and _[Indiosco Technologies Private Limited](https://github.com/Indiosco/)_.**
 
 
-### Team Ceramic
-**Founder, Project Head & Lead Developer:** [Sagnik Ganguly](https://github.com/SagnikGanguly96) (SGN)
+* ### Team Ceramic
+  **Founder, Project Head & Lead Developer:** [Sagnik Ganguly](https://github.com/SagnikGanguly96) (SGN)
 
-**Project Manager & Coordinator:** [Pallab Mukherjee](https://github.com/Pallab-Mukherjee) (ITPL)
+  **Project Manager & Coordinator:** [Pallab Mukherjee](https://github.com/Pallab-Mukherjee) (ITPL)
 
 
 
