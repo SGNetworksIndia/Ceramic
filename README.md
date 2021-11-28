@@ -96,7 +96,9 @@ Or if you found a bug or error which need to be fixed create an issue at [issues
 
 
 ### Team Ceramic
-* **Founder, Project Head & Lead Developer:** [Sagnik Ganguly](https://github.com/SagnikGanguly96)
+**Founder, Project Head & Lead Developer:** [Sagnik Ganguly](https://github.com/SagnikGanguly96) (SGN)
+
+**Project Manager & Coordinator:** [Pallab Mukherjee](https://github.com/Pallab-Mukherjee) (ITPL)
 
 
 
