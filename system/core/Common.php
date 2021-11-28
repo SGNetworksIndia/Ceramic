@@ -41,18 +41,6 @@ defined('CORE_PATH') or defined('INDEX_PAGE') or exit('No direct script access a
 	return Ceramic::get_instance();
 }
 
-spl_autoload_register(function($className) {
-	$className = str_replace("\\", DS, $className);
-	if(str_contains($className, 'Ceramic')) {
-		if(!class_exists($className)) {
-			$className = str_replace('Ceramic', '', $className);
-			$file = FRAMEWORK_PATH . "libraries" . DS . "$className.php";
-			if(file_exists($file))
-				require_once $file;
-		}
-	}
-});
-
 if(!function_exists('is_php')) {
 	/**
 	 * Determines if the current version of PHP is equal to or greater than the supplied value
@@ -90,23 +78,6 @@ function rsearch(string $folder, string $pattern, bool $multiple = false): strin
 	return $fileList;
 }
 
-function fileExists(string $fileName): bool {
-	static $dirList = [];
-	if(file_exists($fileName)) {
-		return true;
-	}
-	$directoryName = dirname($fileName);
-	if(!isset($dirList[$directoryName])) {
-		$fileArray = glob($directoryName . '/*', GLOB_NOSORT);
-		$dirListEntry = [];
-		foreach($fileArray as $file) {
-			$dirListEntry[strtolower($file)] = true;
-		}
-		$dirList[$directoryName] = $dirListEntry;
-	}
-	return isset($dirList[$directoryName][strtolower($fileName)]);
-}
-
 // recursive directory scan
 function recursiveScan(string $dir, string $pattern = '/*'): array {
 	$tree = glob(rtrim($dir, '/') . $pattern);
@@ -122,6 +93,45 @@ function recursiveScan(string $dir, string $pattern = '/*'): array {
 		}
 	}
 	return $files;
+}
+
+function fileExists(string $fileName): bool {
+	static $dirList = [];
+	if(file_exists($fileName)) {
+		return true;
+	}
+	if(!config_item('case_insensitive'))
+		return false;
+	$directoryName = dirname($fileName);
+	if(!isset($dirList[$directoryName])) {
+		$fileArray = glob($directoryName . '/*', GLOB_NOSORT);
+		$dirListEntry = [];
+		foreach($fileArray as $file) {
+			$dirListEntry[strtolower($file)] = true;
+		}
+		$dirList[$directoryName] = $dirListEntry;
+	}
+	return isset($dirList[$directoryName][strtolower($fileName)]);
+}
+
+function findFile(string $fileName): string {
+	static $dirList = [];
+	if(file_exists($fileName)) {
+		return $fileName;
+	}
+	if(!config_item('case_insensitive'))
+		return $fileName;
+
+	$directoryName = dirname($fileName);
+	if(!isset($dirList[$directoryName])) {
+		$fileArray = glob($directoryName . '/*', GLOB_NOSORT);
+		$dirListEntry = [];
+		foreach($fileArray as $file) {
+			$dirListEntry[strtolower(basename($file))] = $file;
+		}
+		$dirList[$directoryName] = $dirListEntry;
+	}
+	return $dirList[$directoryName][strtolower(basename($fileName))];
 }
 
 /**

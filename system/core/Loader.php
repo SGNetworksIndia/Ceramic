@@ -1,4 +1,39 @@
 <?php
+/**
+ * Ceramic
+ *
+ * An open source application development framework for PHP
+ *
+ * This content is released under the MIT License (MIT)
+ *
+ * Copyright (c) 2020, SGNetworks.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @since    Version 1.0.1
+ * @author Sagnik Ganguly
+ * @copyright    Copyright (c) 2020, SGNetworks. (https://sgn.heliohost.org/)
+ * @license    http://opensource.org/licenses/MIT	MIT License
+ * @link https://ceramic.sgn.heliohost.org/
+ * @package Ceramic
+ * @filesource
+ */
 use JetBrains\PhpStorm\Pure;
 
 defined('CORE_PATH') or exit('No direct script access allowed');
@@ -172,7 +207,7 @@ class Loader {
 			$template->set("title_prefix", $data['title_prefix']);
 			$template->set("project_name", $data['project_name']);
 			$template->set("project_version", $data['project_version']);
-			foreach($data as $k=>$v) {
+			foreach($data as $k => $v) {
 				if(is_string($v) || is_int($v))
 					$template->set($k, $v);
 			}
@@ -221,6 +256,7 @@ class Loader {
 
 	/**
 	 * @param bool $renderTemplate
+	 *
 	 * @return Loader
 	 */
 	public function setRenderTemplate(bool $renderTemplate): Loader {
@@ -230,6 +266,7 @@ class Loader {
 
 	/**
 	 * @param string $contentType
+	 *
 	 * @return Loader
 	 */
 	public function setContentType(string $contentType): Loader {
@@ -255,6 +292,7 @@ class Loader {
 
 	/**
 	 * @param bool $urlArgumentAsView
+	 *
 	 * @return Loader
 	 */
 	public function setUrlArgumentAsView(bool $urlArgumentAsView): Loader {
@@ -266,6 +304,7 @@ class Loader {
 
 	/**
 	 * @param string $urlArgumentName
+	 *
 	 * @return Loader
 	 */
 	public function setUrlArgumentName(string $urlArgumentName): Loader {
@@ -277,6 +316,7 @@ class Loader {
 
 	/**
 	 * @param bool $pushScriptsToBottom
+	 *
 	 * @return Loader
 	 */
 	public function setPushScriptsToBottom(bool $pushScriptsToBottom = true): Loader {
@@ -286,6 +326,7 @@ class Loader {
 
 	/**
 	 * @param string|null $header
+	 *
 	 * @return Loader
 	 */
 	public function setHeader(?string $header): Loader {
@@ -295,6 +336,7 @@ class Loader {
 
 	/**
 	 * @param string|null $footer
+	 *
 	 * @return Loader
 	 */
 	public function setFooter(?string $footer): Loader {
@@ -304,6 +346,7 @@ class Loader {
 
 	/**
 	 * @param bool $loadCommonFilesOnView
+	 *
 	 * @return Loader
 	 */
 	public function setLoadCommonFilesOnView(bool $loadCommonFilesOnView): Loader {
@@ -313,6 +356,7 @@ class Loader {
 
 	/**
 	 * @param bool $loadCommonFiles
+	 *
 	 * @return Loader
 	 */
 	public function setLoadCommonFiles(bool $loadCommonFiles): Loader {
@@ -353,20 +397,21 @@ class Loader {
 	 * @param string $lib The name of the library to load
 	 */
 	public function library(string $lib) {
-		include LIB_PATH . "$lib.php";
-		$libName = strtolower(basename($lib));
-		if(str_contains($lib, '/') || str_contains($lib, '\\')) {
-			$className = str_replace('/', '\\', $lib);
-			$class = "Ceramic\\$className";
-		} else {
-			$className = $libName;
+		$fileName = LIB_PATH . "$lib.php";
+		if(fileExists($fileName)) {
+			$filePath = findFile($fileName);
+			include_once $filePath;
+
+			$className = strtolower(basename($lib));
 			$class = ucfirst($className);
-		}
-		if(class_exists($class)) {
-			if($this->loadOnContext)
-				getCMControllerInstance()->$libName = new $class();
-			else
-				$this->$libName = new $class();
+			if(class_exists($class)) {
+				if($this->loadOnContext)
+					getCMControllerInstance()->$className = new $class();
+				else
+					$this->$className = new $class();
+			}
+		} else {
+			show_error("The library <b>$lib</b> not found! If you're sure the file exists, check case-sesitivity of the library or set configuration variable <b>case_insensitive</b> to <b>TRUE</b>");
 		}
 	}
 
@@ -376,7 +421,13 @@ class Loader {
 	 * @param string $helper The name of the helper to load
 	 */
 	public function helper(string $helper) {
-		include HELPER_PATH . "{$helper}_helper.php";
+		$fileName = HELPER_PATH . "{$helper}_helper.php";
+		if(fileExists($fileName)) {
+			$filePath = findFile($fileName);
+			include_once $filePath;
+		} else {
+			show_error("The helper <b>$helper</b> not found! If you're sure the file exists, check case-sesitivity of the library or set configuration variable <b>case_insensitive</b> to <b>TRUE</b>");
+		}
 	}
 
 	/**
@@ -385,11 +436,11 @@ class Loader {
 	 * @param string $model The name of the library to load
 	 */
 	public function model(string $model) {
-		$path = realpath(MODEL_PATH . "$model.php");
-		$path = (!file_exists($path)) ? realpath(MODEL_PATH . "{$model}_model.php") : $path;
-		if(file_exists($path)) {
-			include_once $path;
-			$pathInfo = pathinfo($path);
+		$fileName = MODEL_PATH . "$model.php";
+		if(fileExists($fileName)) {
+			$filePath = findFile($fileName);
+			include_once $filePath;
+			$pathInfo = pathinfo($filePath);
 			$path = $pathInfo['dirname'] . DIRECTORY_SEPARATOR . $pathInfo['filename'];
 
 			$class = rtrim(str_replace(MODEL_PATH, '', $path), '/\\');
@@ -403,7 +454,7 @@ class Loader {
 				show_error("The class related to the model <b>$model</b> not found!");
 			}
 		} else {
-			show_error("The file related to the model <b>$model</b> not found!");
+			show_error("The file related to the model <b>$model</b> not found! If you're sure the file exists, check case-sesitivity of the library or set configuration variable <b>case_insensitive</b> to <b>TRUE</b>");
 		}
 	}
 
@@ -429,7 +480,7 @@ class Loader {
 
 		require_once(FRAMEWORK_PATH . 'database/DB.php');
 
-		if($return === TRUE) {
+		if($return === true) {
 			return DB($params, $query_builder);
 		}
 

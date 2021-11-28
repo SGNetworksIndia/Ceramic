@@ -125,15 +125,16 @@ class Ceramic {
 		}
 
 		if(!empty(CONTROLLER)) {
-			$file = CONTROLLER_FILE;
-			$page = (!empty(VIEW))?CONTROLLER_PAGE.'/'.VIEW : CONTROLLER.'/__default';
-			$page_url = (empty(VIEW) || VIEW == '__default')?CONTROLLER_PAGE.'/' : $page;
+			$fileName = CONTROLLER_FILE;
+			$page = (!empty(VIEW)) ? CONTROLLER_PAGE . '/' . VIEW : CONTROLLER . '/__default';
+			$page_url = (empty(VIEW) || VIEW == '__default') ? CONTROLLER_PAGE . '/' : $page;
 
 			define('CURRENT_PAGE', $page_url);
 
-			if(file_exists($file)) {
+			if(fileExists($fileName)) {
+				$filePath = $fileName;
 				if(!class_exists(CONTROLLER)) {
-					include_once($file);
+					include_once($filePath);
 					$controller_name = CONTROLLER;
 					$controller = new $controller_name;
 					if(method_exists($controller, '__common')) {
@@ -176,10 +177,11 @@ class Ceramic {
 			$controller = config_item("default_controller");
 			$page = (!empty(VIEW))?$controller.'/'.VIEW : $controller.'/__default';
 			if(!empty($controller)) {
-				$file = find_file(APP_PATH . "controllers", "$controller.php");
-				if(!empty($file) && file_exists($file)) {
+				$fileName = APP_PATH . "controllers" . DS . "$controller.php";
+				if(fileExists($fileName)) {
+					$filePath = findFile($fileName);
 					if(!class_exists($controller)) {
-						include_once($file);
+						include_once($filePath);
 						$controller_name = $controller;
 						$controller = new $controller_name;
 						if(method_exists($controller, '__common')) {
