@@ -12,7 +12,7 @@ the power of two frameworks in one. Ceramic is released under its exclusive lice
 
 
 ## REQUIREMENTS
-* **Ceramic Version**: 1.1.0
+* **Ceramic Version**: 1.1.5
 
 
 ### Core Requirements
@@ -89,5 +89,14 @@ Or if you have a new feature which can be added in the `Ceramic Core`, just emai
 
 Or if you found a bug or error which need to be fixed create an issue at [issues](https://github.com/SGNetworksIndia/Ceramic/issues) or if you think you can fix the issue, report the bug to
 [bug@ceramic.eu.org](mailto:bug@ceramic.eu.org) explaining the issue you found.
+
+
+## CREDITS
+**_Ceramic_ is being developed by _Team Ceramic_ in association with _[SGNetworks](https://github.com/SGNetworksIndia/)_ and _[Indiosco Technologies Private Limited](https://github.com/Indiosco/)_.**
+
+* ### Team Ceramic
+  **Founder, Project Head & Lead Developer:** [Sagnik Ganguly](https://github.com/SagnikGanguly96) (SGN)
+
+  **Project Manager & Coordinator:** [Pallab Mukherjee](https://github.com/Pallab-Mukherjee) (ITPL)
 
 
